@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
-const model = require("../models");
 const log = require("../utils/logs");
 const { User } = require("../models");
+var bcrypt = require("bcryptjs");
 
 async function login(req, res, next) {
     const error = validationResult(req);
@@ -16,7 +16,7 @@ async function login(req, res, next) {
     const { username, password } = req.body;
 
     try {
-        const user = await User.find({ username: username });
+        const user = await User.findOne({ username: username });
 
         if (user === null)
             return res.status(400).json({
@@ -25,7 +25,9 @@ async function login(req, res, next) {
                 data: [],
             });
 
-        if (password !== "triadi123") {
+        const checkPass = await bcrypt.compare(password, user.password);
+
+        if (checkPass) {
             return res.status(400).json({
                 status: false,
                 message: "Password doesn't match.",
@@ -55,7 +57,15 @@ async function register(req, res, next) {
         });
     }
     try {
-        const user = await User.create(req.body);
+        const { email, username, password } = req.body;
+
+        const salt = bcrypt.genSaltSync(10);
+        const hashed_password = bcrypt.hashSync(password, salt);
+        const user = await User.create({
+            email: email,
+            username: username,
+            password: hashed_password,
+        });
 
         if (user === null)
             return res.status(400).json({

@@ -3,21 +3,33 @@ function User(mongoose) {
         {
             email: {
                 type: String,
-                required: true,
+                required: [true, `The email shouldn't be empty.`],
                 lowercase: true,
+                unique: true,
             },
 
             username: {
                 type: String,
-                required: false,
+                require: [true, "Username harus di isi"],
+                unique: true,
             },
             password: {
                 type: String,
-                required: true,
+                required: [true, `The password should not be empty.`],
             },
+            status: {
+                type: String,
+                enum: ["Y", "N"],
+                default: "Y",
+            },
+            role: {
+                type: String,
+                enum: ["admin", "user"],
+                default: "user",
+            },
+
             verified: {
                 type: Date,
-                required: false,
             },
         },
         { timestamps: true }
