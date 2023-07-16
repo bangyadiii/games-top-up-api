@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    image: app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 9999:9999
+    depends_on:
+      - dev_db
+
+  dev_db:
+    image: postgres:14
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: top-up-diamond
+    networks:
+      - top-up-diamond-network
+networks:
+  top-up-diamon-network:
