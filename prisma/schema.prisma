@@ -11,29 +11,49 @@ datasource db {
 }
 
 enum Status {
-  Y
-  N
+  Y @map("y")
+  N @map("n")
 }
 
 enum Role {
-  USER
-  ADMIN
+  USER  @map("user")
+  ADMIN @map("admin")
 }
 
 model User {
-  id        Int     @default(autoincrement()) @id
-  email     String  @unique
-  username  String
-  password  String 
-  status    Status 
-  role      Role     
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  email        String   @unique
+  username     String
+  password     String
+  passwordSalt String
+  status       Status
+  role         Role
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map(name: "users")
 }
 
 model Game {
-  id        Int      @default(autoincrement()) @id
+  id        String    @id @default(uuid())
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  products  Product[]
+  thumbnail String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("games")
+}
+
+model Product {
+  id           String   @id @default(uuid())
+  coinName     String   @map("coin_name")
+  coinQuantity Int      @map("coin_quantity")
+  price        Int
+  game         Game     @relation(fields: [gameId], references: [id])
+  gameId       String   @map("game_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("products")
 }

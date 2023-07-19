@@ -3,7 +3,7 @@ import { UserService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
-import { CreateUserDto } from './dto/CreateUserDTO';
+import { CreateUserDto } from './dto/create-user.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -15,7 +15,7 @@ export class AuthService {
     const user = await this.usersService.findByEmail(email);
 
     if (user && bcrypt.compareSync(pass, user.password)) {
-      const { password, role, ...result } = user;
+      const { password, role, passwordSalt, ...result } = user;
       return result;
     }
 
@@ -24,7 +24,7 @@ export class AuthService {
 
   async login(user: User) {
     const payload = { email: user.email, sub: user.id };
-    const access_token = this.jwtService.sign(payload);
+    const access_token = await this.jwtService.signAsync(payload);
     return { access_token };
   }
 
@@ -35,7 +35,7 @@ export class AuthService {
     }
 
     const user = await this.usersService.createUser(data);
-    const { password, ...result } = user;
+    const { password, passwordSalt, ...result } = user;
     return result;
   }
 }

@@ -6,11 +6,15 @@ import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import * as redisStore from 'cache-manager-redis-store';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import type { RedisClientOptions } from 'redis';
+import { ProductsModule } from './products/products.module';
+import { GamesModule } from './games/games.module';
 
 @Module({
   imports: [
     UserModule,
     AuthModule,
+    ProductsModule,
+    GamesModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
