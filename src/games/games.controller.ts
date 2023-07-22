@@ -17,7 +17,6 @@ import { AdminRoleGuard } from 'src/auth/admin-role/admin-role.guard';
 export class GamesController {
   constructor(private readonly gameService: GamesService) {}
   @UseInterceptors(CacheInterceptor)
-  @UseGuards(AdminRoleGuard)
   @Get('/')
   async getGames() {
     const payload = await this.gameService.getGames();

@@ -30,6 +30,7 @@ export class GamesService {
       game = await this.dbservice.game.findMany({
         include: {
           products: true,
+          coins: true,
         },
       });
       await this.cacheService.set('games', game);
@@ -47,6 +48,7 @@ export class GamesService {
         },
         include: {
           products: true,
+          coins: true,
         },
       });
       await this.cacheService.set(id, game);
