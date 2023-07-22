@@ -12,6 +12,8 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
+  app.setGlobalPrefix('api');
+
   const config = new DocumentBuilder()
     .setTitle('Top Up Diamond API')
     .setDescription('The top up diamond API description')

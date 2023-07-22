@@ -8,6 +8,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import type { RedisClientOptions } from 'redis';
 import { ProductsModule } from './products/products.module';
 import { GamesModule } from './games/games.module';
+import { CoinsService } from './products/coins/coins.service';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { GamesModule } from './games/games.module';
       provide: APP_INTERCEPTOR,
       useClass: CacheInterceptor,
     },
+    CoinsService,
   ],
 })
 export class AppModule {}

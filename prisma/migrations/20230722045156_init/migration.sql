@@ -28,9 +28,20 @@ CREATE TABLE `games` (
 -- CreateTable
 CREATE TABLE `products` (
     `id` VARCHAR(191) NOT NULL,
-    `coin_name` VARCHAR(191) NOT NULL,
     `coin_quantity` INTEGER NOT NULL,
     `price` INTEGER NOT NULL,
+    `game_id` VARCHAR(191) NOT NULL,
+    `product_type_id` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `product_types` (
+    `id` VARCHAR(191) NOT NULL,
+    `coin_name` VARCHAR(191) NOT NULL,
     `game_id` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
@@ -40,3 +51,6 @@ CREATE TABLE `products` (
 
 -- AddForeignKey
 ALTER TABLE `products` ADD CONSTRAINT `products_game_id_fkey` FOREIGN KEY (`game_id`) REFERENCES `games`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `products` ADD CONSTRAINT `products_product_type_id_fkey` FOREIGN KEY (`product_type_id`) REFERENCES `product_types`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

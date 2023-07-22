@@ -1,10 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
 
 export class CreateProductDto {
-  @IsNotEmpty()
-  @IsString()
-  coinName: string;
-
   @IsNotEmpty()
   @IsNumber()
   coinQuantity: number;
@@ -16,4 +12,8 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsUUID()
   gameId: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  coinId: string;
 }

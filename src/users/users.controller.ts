@@ -14,7 +14,6 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   async login(@Request() request: any) {
-    console.log('user', request.user);
     return request.user;
   }
 }

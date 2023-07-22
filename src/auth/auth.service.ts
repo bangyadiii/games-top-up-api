@@ -3,7 +3,9 @@ import { UserService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { plainToInstance } from 'class-transformer';
+import { SerializedUser } from './dtos/serialized-user';
 @Injectable()
 export class AuthService {
   constructor(
@@ -35,7 +37,6 @@ export class AuthService {
     }
 
     const user = await this.usersService.createUser(data);
-    const { password, passwordSalt, ...result } = user;
-    return result;
+    return new SerializedUser(user);
   }
 }

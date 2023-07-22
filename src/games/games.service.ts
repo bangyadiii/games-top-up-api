@@ -4,6 +4,7 @@ import { CreateGameDTO } from './dto/create-game.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { UpdateGameDTO } from './dto/update-game.dto';
 
 @Injectable()
 export class GamesService {
@@ -38,7 +39,7 @@ export class GamesService {
   }
 
   async getGameById(id: string) {
-    let game = await this.cacheService.get<Game | undefined>(id.toString());
+    let game = await this.cacheService.get<Game | undefined>(id);
     if (!game) {
       game = await this.dbservice.game.findUnique({
         where: {
@@ -48,8 +49,22 @@ export class GamesService {
           products: true,
         },
       });
-      await this.cacheService.set(id.toString(), game);
+      await this.cacheService.set(id, game);
     }
+
+    return game;
+  }
+
+  async updateGame(id: string, data: UpdateGameDTO) {
+    const game = await this.dbservice.game.update({
+      data: {
+        name: data.name,
+        thumbnail: data.thumbnail,
+      },
+      where: {
+        id: id,
+      },
+    });
 
     return game;
   }

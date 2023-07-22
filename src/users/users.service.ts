@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from '../auth/dto/create-user.dto';
+import { CreateUserDto } from '../auth/dtos/create-user.dto';
 import { Role, Status, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -13,6 +13,17 @@ export class UserService {
     private readonly dbService: PrismaService,
   ) {}
 
+  async findById(id: string) {
+    let user = await this.cacheManager.get<User | undefined>(id);
+    if (!user) {
+      user = await this.dbService.user.findUnique({
+        where: { id },
+      });
+      await this.cacheManager.set(id, user, 1 * 1000);
+    }
+
+    return user || null;
+  }
   async findByEmail(email: string) {
     let user = await this.cacheManager.get<User | undefined>(email);
     if (!user) {

@@ -1,7 +1,16 @@
-import { Request, Controller, Post, UseGuards, Body } from '@nestjs/common';
+import {
+  Request,
+  Controller,
+  Post,
+  UseGuards,
+  Body,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
 import { LocalAuthGuard } from './local-auth.guard';
+import { JsonResponse } from 'src/common/JsonResponse';
 
 @Controller('auth')
 export class AuthController {
@@ -10,11 +19,26 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() request: any) {
-    return await this.authService.login(request.user);
+    const payload = await this.authService.login(request.user);
+    const response: JsonResponse<typeof payload> = {
+      statusCode: 200,
+      message: 'OK',
+      data: payload,
+    };
+
+    return response;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('register')
   async register(@Body() request: CreateUserDto) {
-    return await this.authService.register(request);
+    const data = await this.authService.register(request);
+    const response: JsonResponse<typeof data> = {
+      statusCode: 201,
+      message: 'CREATED',
+      data: data,
+    };
+
+    return response;
   }
 }

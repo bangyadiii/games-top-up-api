@@ -38,6 +38,7 @@ model Game {
   id        String    @id @default(uuid())
   name      String
   products  Product[]
+  coins     Coin[]
   thumbnail String?
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -47,13 +48,27 @@ model Game {
 
 model Product {
   id           String   @id @default(uuid())
-  coinName     String   @map("coin_name")
   coinQuantity Int      @map("coin_quantity")
   price        Int
   game         Game     @relation(fields: [gameId], references: [id])
   gameId       String   @map("game_id")
+  coin         Coin     @relation(fields: [coinId], references: [id])
+  coinId       String   @map("coin_id")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   @@map("products")
+}
+
+model Coin {
+  id          String    @id @default(uuid())
+  coinName    String    @map("coin_name")
+  game        Game      @relation(fields: [gameId], references: [id])
+  gameId      String    @map("game_id")
+  coinIconUrl String?   @map("coin_icon_url")
+  products    Product[]
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("coins")
 }
