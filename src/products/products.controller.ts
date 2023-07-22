@@ -26,7 +26,6 @@ export class ProductsController {
   ) {}
 
   @UseInterceptors(CacheInterceptor)
-  @UseGuards(AdminRoleGuard)
   @Get('/')
   async getProducts() {
     const data = await this.productService.getProducts();
