@@ -1,21 +1,28 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  UnauthorizedException,
+  ForbiddenException,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Role } from '@prisma/client';
-import { Observable } from 'rxjs';
 import { UserService } from 'src/users/users.service';
 
 @Injectable()
-export class AdminRoleGuard implements CanActivate {
-  constructor(private readonly userService: UserService) {}
-  async canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
+export class AdminRoleGuard extends AuthGuard('jwt') {
+  private readonly logger = new Logger(AdminRoleGuard.name);
 
-    if (request?.user) {
-      console.log(request.user);
-      const { id } = request.user;
-      const user = this.userService.findById(id);
-      return (await user).role == Role.ADMIN;
+  constructor(private readonly userService: UserService) {
+    super();
+  }
+
+  handleRequest(err, user, info) {
+    if (err || !user) {
+      throw err || new UnauthorizedException();
     }
 
-    return false;
+    if (user.role !== Role.ADMIN) throw new ForbiddenException();
+
+    return user;
   }
 }

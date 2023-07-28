@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["tracing"]
 }
 
 datasource db {
@@ -21,41 +22,69 @@ enum Role {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  username     String
-  password     String
-  passwordSalt String
-  status       Status
-  role         Role
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id               String            @id @default(uuid())
+  email            String            @unique
+  username         String
+  password         String
+  passwordSalt     String
+  status           Status
+  role             Role
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  userGameProperty UserGameProperty?
+  transactions     Transaction[]
 
   @@map(name: "users")
 }
 
+model UserGameProperty {
+  id             String   @id @default(uuid())
+  user           User?    @relation(fields: [userId], references: [id])
+  userId         String?  @unique @map("user_id")
+  favoriteGame   Game?    @relation(fields: [favoritsGameId], references: [id])
+  favoritsGameId String?  @unique @map("favorite_game_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("user_game_properties")
+}
+
+model GameCategory {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  games     Game[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("game_categories")
+}
+
 model Game {
-  id        String    @id @default(uuid())
-  name      String
-  products  Product[]
-  coins     Coin[]
-  thumbnail String?
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  id               String            @id @default(uuid())
+  gameCategoryId   String            @map("game_category_id")
+  gameCategory     GameCategory      @relation(fields: [gameCategoryId], references: [id])
+  name             String            
+  products         Product[]
+  coins            Coin[]
+  thumbnail        String?
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  userGameProperty UserGameProperty?
 
   @@map("games")
 }
 
 model Product {
-  id           String   @id @default(uuid())
-  coinQuantity Int      @map("coin_quantity")
+  id           String        @id @default(uuid())
+  coinQuantity Int           @map("coin_quantity")
   price        Int
-  game         Game     @relation(fields: [gameId], references: [id])
-  gameId       String   @map("game_id")
-  coin         Coin     @relation(fields: [coinId], references: [id])
-  coinId       String   @map("coin_id")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  game         Game          @relation(fields: [gameId], references: [id])
+  gameId       String        @map("game_id")
+  coin         Coin          @relation(fields: [coinId], references: [id])
+  coinId       String        @map("coin_id")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  transactions Transaction[]
 
   @@map("products")
 }
@@ -71,4 +100,34 @@ model Coin {
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
   @@map("coins")
+}
+
+enum TransactionStatus {
+  Success @map("success")
+  Pending @map("pending")
+  Failed  @map("failed")
+}
+
+model Transaction {
+  id          String            @id @default(uuid())
+  orderId     String            @map("order_id")
+  grossAmount Int               @map("gross_amount")
+  status      TransactionStatus
+  userId      String
+  user        User              @relation(fields: [userId], references: [id])
+  productId   String
+  product     Product           @relation(fields: [productId], references: [id])
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  @@map("transactions")
+}
+
+model PaymentLog {
+  id        String   @id @default(uuid())
+  JsonLog   Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("payment_logs")
 }
