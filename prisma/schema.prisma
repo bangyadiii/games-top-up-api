@@ -63,7 +63,7 @@ model Game {
   id               String            @id @default(uuid())
   gameCategoryId   String            @map("game_category_id")
   gameCategory     GameCategory      @relation(fields: [gameCategoryId], references: [id])
-  name             String            
+  name             String            @unique        
   products         Product[]
   coins            Coin[]
   thumbnail        String?
@@ -91,7 +91,7 @@ model Product {
 
 model Coin {
   id          String    @id @default(uuid())
-  coinName    String    @map("coin_name")
+  coinName    String    @unique @map("coin_name")
   game        Game      @relation(fields: [gameId], references: [id])
   gameId      String    @map("game_id")
   coinIconUrl String?   @map("coin_icon_url")
