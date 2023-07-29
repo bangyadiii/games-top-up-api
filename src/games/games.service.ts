@@ -1,27 +1,47 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, Logger, ConflictException } from '@nestjs/common';
 import { Game } from '@prisma/client';
 import { CreateGameDTO } from './dto/create-game.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { UpdateGameDTO } from './dto/update-game.dto';
+import { StorageService } from 'src/Infrastructure/storage/storage.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class GamesService {
+  private readonly logger = new Logger(GamesService.name);
+
   constructor(
     private readonly dbservice: PrismaService,
+    private readonly storageService: StorageService,
     @Inject(CACHE_MANAGER) private readonly cacheService: Cache,
   ) {}
 
   async createGame(data: CreateGameDTO) {
-    const game = await this.dbservice.game.create({
-      data: {
-        name: data.name,
-        thumbnail: data.thumbnail,
-      },
-    });
+    const destFile = `game/${data.gameThumbnailPath.split('/')[2]}`;
+    const filePath = await this.storageService.moveFile(
+      data.gameThumbnailPath,
+      destFile,
+    );
+    delete data.gameThumbnailPath;
+    try {
+      const game = await this.dbservice.game.create({
+        data: {
+          ...data,
+          thumbnail: filePath.publicUrl,
+        },
+      });
 
-    return game;
+      return game;
+    } catch (error) {
+      this.storageService.removeFile(filePath.path);
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002')
+          throw new ConflictException('Game Name is exist');
+      }
+      throw error;
+    }
   }
 
   async getGames() {
@@ -60,8 +80,7 @@ export class GamesService {
   async updateGame(id: string, data: UpdateGameDTO) {
     const game = await this.dbservice.game.update({
       data: {
-        name: data.name,
-        thumbnail: data.thumbnail,
+        ...data,
       },
       where: {
         id: id,

@@ -11,5 +11,5 @@ export class CreateCoinDTO {
 
   @IsNotEmpty()
   @IsString()
-  coinIconBase64: string;
+  coinFile: string;
 }

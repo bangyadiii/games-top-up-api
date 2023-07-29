@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateGameDTO {
   @IsNotEmpty()
@@ -7,5 +7,9 @@ export class CreateGameDTO {
 
   @IsNotEmpty()
   @IsString()
-  thumbnail: string;
+  gameCategoryId;
+
+  @IsNotEmpty()
+  @IsString()
+  gameThumbnailPath: string;
 }

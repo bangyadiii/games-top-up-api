@@ -5,6 +5,8 @@ import { Prisma, Product } from '@prisma/client';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { StorageService } from 'src/Infrastructure/storage/storage.service';
+import { File } from 'src/shared/Interfaces/file.interface';
 
 @Injectable()
 export class ProductsService {
