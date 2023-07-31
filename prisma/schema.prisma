@@ -110,9 +110,9 @@ enum TransactionStatus {
 
 model Transaction {
   id          String            @id @default(uuid())
-  orderId     String            @map("order_id")
+  orderId     String            @unique @map("order_id")
   grossAmount Int               @map("gross_amount")
-  status      TransactionStatus
+  status      TransactionStatus @default(Pending)
   userId      String
   user        User              @relation(fields: [userId], references: [id])
   productId   String

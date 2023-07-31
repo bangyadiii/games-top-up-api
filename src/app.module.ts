@@ -12,6 +12,7 @@ import { TransactionsModule } from './transactions/transactions.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { MediasModule } from './medias/medias.module';
 import { StorageModule } from './Infrastructure/storage/storage.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { StorageModule } from './Infrastructure/storage/storage.module';
       ttl: 60,
       limit: 1000,
     }),
+    EventEmitterModule.forRoot(),
     TransactionsModule,
     MediasModule,
   ],
