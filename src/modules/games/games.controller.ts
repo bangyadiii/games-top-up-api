@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { GamesService } from './games.service';
 import { CreateGameDTO } from './dto/create-game.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { JsonResponse } from 'src/shared/Interfaces/JsonResponse';
-import { AdminRoleGuard } from 'src/auth/admin-role/admin-role.guard';
+import { AdminRoleGuard } from 'src/modules/auth/admin-role/admin-role.guard';
 import { CreateGameCategoryDTO } from './dto/create-game-category';
 import { CategoryService } from './category/category.service';
 

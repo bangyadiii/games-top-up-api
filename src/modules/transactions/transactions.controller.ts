@@ -9,7 +9,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { OrderCoinDTO } from './dto/order-coin.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
 import { TransactionsService } from './transactions.service';
 import { JsonResponse } from 'src/shared/Interfaces/JsonResponse';
 import { User } from '@prisma/client';

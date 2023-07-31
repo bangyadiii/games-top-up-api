@@ -14,12 +14,12 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { JsonResponse } from 'src/shared/Interfaces/JsonResponse';
 import { CreateCoinDTO as CreateCoinDto } from './dto/create-coin';
 import { CoinsService } from './coins/coins.service';
-import { AdminRoleGuard } from 'src/auth/admin-role/admin-role.guard';
+import { AdminRoleGuard } from 'src/modules/auth/admin-role/admin-role.guard';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 

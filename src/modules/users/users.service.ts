@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from '../auth/dtos/create-user.dto';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { Role, Status, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { CreateUserDto } from '../auth/dtos/create-user.dto';
 
 @Injectable()
 export class UserService {

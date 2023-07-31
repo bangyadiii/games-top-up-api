@@ -1,4 +1,4 @@
-import { PaymentNotificationDTO } from 'src/transactions/dto/payment-notification.dto';
+import { PaymentNotificationDTO } from 'src/modules/transactions/dto/payment-notification.dto';
 
 class PaymentNotificationEvent {
   // Properti yang ada pada semua bentuk response

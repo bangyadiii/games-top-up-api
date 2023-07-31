@@ -6,15 +6,11 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Role } from '@prisma/client';
-import { UserService } from 'src/users/users.service';
+import { UserService } from 'src/modules/users/users.service';
 
 @Injectable()
 export class AdminRoleGuard extends AuthGuard('jwt') {
   private readonly logger = new Logger(AdminRoleGuard.name);
-
-  constructor(private readonly userService: UserService) {
-    super();
-  }
 
   handleRequest(err, user, info) {
     if (err || !user) {

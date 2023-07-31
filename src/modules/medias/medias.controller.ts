@@ -9,7 +9,7 @@ import {
   BadRequestException,
   UseInterceptors,
 } from '@nestjs/common';
-import { StorageService } from '../Infrastructure/storage/storage.service';
+import { StorageService } from '../../Infrastructure/storage/storage.service';
 import { randomUUID } from 'crypto';
 import { ApiConsumes } from '@nestjs/swagger';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';

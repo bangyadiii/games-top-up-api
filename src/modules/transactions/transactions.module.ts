@@ -4,11 +4,9 @@ import { TransactionsController } from './transactions.controller';
 import { MidtransService } from './midtrans/midtrans.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
-import { MidtransGateway } from './midtrans/midtrans.gateway';
-import { MidtransGateway } from './midtrans/midtrans.gateway';
 
 @Module({
-  providers: [TransactionsService, MidtransService, ConfigModule, MidtransGateway],
+  providers: [TransactionsService, MidtransService, ConfigModule],
   imports: [
     HttpModule.register({
       timeout: 5000,

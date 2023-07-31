@@ -3,7 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { OrderCoinDTO } from './dto/order-coin.dto';
 import { MidtransService } from './midtrans/midtrans.service';
 import { Logger } from '@nestjs/common/services';

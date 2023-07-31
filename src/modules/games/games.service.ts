@@ -1,7 +1,7 @@
 import { Injectable, Inject, Logger, ConflictException } from '@nestjs/common';
 import { Game } from '@prisma/client';
 import { CreateGameDTO } from './dto/create-game.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { UpdateGameDTO } from './dto/update-game.dto';
