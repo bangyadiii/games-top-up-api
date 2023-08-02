@@ -1,23 +1,29 @@
-# Menggunakan image node versi terbaru sebagai base image
-FROM node:latest
+FROM node:18 AS builder
 
-# Mengatur direktori kerja di dalam container
+# Create app directory
 WORKDIR /app
 
-# Menyalin package.json dan package-lock.json ke direktori kerja
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
+COPY prisma ./prisma/
 
-# Menjalankan perintah npm install untuk menginstal dependensi
+# Install app dependencies
 RUN npm install
 
-# Menyalin seluruh kode sumber aplikasi ke direktori kerja
 COPY . .
 
-# Menjalankan perintah build untuk membangun aplikasi NestJS
 RUN npm run build
 
-# Menentukan port yang akan digunakan oleh aplikasi
-EXPOSE 9999
+FROM node:18-alpine as production
 
-# Menjalankan perintah start untuk menjalankan aplikasi NestJS
+WORKDIR /usr/prod/app
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+# Generate prisma client, leave out if generating in `postinstall` script
+RUN npx prisma generate
+
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 9999
 CMD ["npm", "run", "start:prod"]

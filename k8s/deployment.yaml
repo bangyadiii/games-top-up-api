@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prime-game-deployment
+spec:
+  selector:
+    matchLabels:
+      app: prime-game
+  template:
+    metadata:
+      labels:
+        app: prime-game
+    spec:
+      containers:
+        - name: prime-game
+          image: bangyadiii/prime-game:latest
+          ports:
+            - containerPort: 9999
+          envFrom:
+            - configMapRef:
+                name: prime-game-configmap
+            - secretRef:
+                name: prime-game-secret

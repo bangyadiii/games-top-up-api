@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prime-game-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: prime-game
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9999

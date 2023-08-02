@@ -1,0 +1,11 @@
+.git
+node_modules
+dist
+.eslint*
+.gitignore
+.husky
+.prettierrc
+docker-compose.yaml
+README.md
+.env
+npm-debug.log

@@ -16,8 +16,6 @@ export class StorageService {
       projectId: configService.getOrThrow('GCS_PROJECT_ID'),
       keyFilename: 'src/.credentials/credentials.json', // Path ke file kredensial GCS
     };
-    if (configService.getOrThrow('NODE_ENV') !== 'PRODUCTION') {
-    }
 
     this.storage = new Storage(gcsConfig);
     this.bucket = this.storage.bucket(
