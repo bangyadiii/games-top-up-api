@@ -14,7 +14,7 @@ export class StorageService {
   constructor(private readonly configService: ConfigService) {
     const gcsConfig: StorageOptions = {
       projectId: configService.getOrThrow('GCS_PROJECT_ID'),
-      keyFilename: 'src/.credentials/credentials.json', // Path ke file kredensial GCS
+      keyFilename: configService.getOrThrow('GOOGLE_APPLICATION_CREDENTIALS'),
     };
 
     this.storage = new Storage(gcsConfig);
