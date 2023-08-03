@@ -9,16 +9,16 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
-  @UseInterceptors(CacheInterceptor)
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(CacheInterceptor)
   @Get('profile')
   @HttpCode(HttpStatus.OK)
-  async login(@Request() request: any) {
+  async getProfile(@Request() request: any) {
     return request.user;
   }
 }

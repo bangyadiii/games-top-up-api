@@ -13,7 +13,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
+  async validateUser(
+    email: string,
+    pass: string,
+  ): Promise<Partial<User> | null> {
     const user = await this.usersService.findByEmail(email);
 
     if (user && bcrypt.compareSync(pass, user.password)) {
