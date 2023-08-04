@@ -16,12 +16,11 @@ export class AuthService {
   async validateUser(
     email: string,
     pass: string,
-  ): Promise<Partial<User> | null> {
+  ): Promise<SerializedUser | null> {
     const user = await this.usersService.findByEmail(email);
 
     if (user && bcrypt.compareSync(pass, user.password)) {
-      const { password, role, passwordSalt, ...result } = user;
-      return result;
+      return new SerializedUser(user);
     }
 
     return null;

@@ -62,14 +62,7 @@ describe('AuthService', () => {
       jest.spyOn(userService, 'findByEmail').mockResolvedValue(user);
 
       const result = await authService.validateUser(email, password);
-      expect(result).toEqual({
-        id: user.id,
-        email: user.email,
-        status: user.status,
-        username: user.username,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      });
+      expect(result).toEqual(user);
     });
 
     it('should return null if email or password is invalid', async () => {

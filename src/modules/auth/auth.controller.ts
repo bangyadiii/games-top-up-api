@@ -20,6 +20,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
+  @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(HttpStatus.OK)
   async login(@Request() request: any) {
     const payload = await this.authService.login(request.user);
